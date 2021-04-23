@@ -1,0 +1,9 @@
+---
+foo: bar
+bar: baz
+---
+baz: quz
+---
+Some text
+Some text
+Some text
