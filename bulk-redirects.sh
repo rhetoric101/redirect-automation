@@ -22,12 +22,21 @@
 #   5. At the confirmation prompt, enter "y" to continue.
 #      NOTE: If you no longer want to run the script, click CTRL+C to quit.
 #   6. When the script completes, copy the file "redirects-to-test.txt" to a safe place.
-#   7. Move the directories, rebuild the site, and test each of the redirects in "redirects-to-test.txt." 
+#
+# Do the following housekeeping tasks:
+#   1. Move the directories to their new location in the file system.
+#   2. Manually move the old navigation tree in the .nav file either into its new location
+#      in the same file, or move it to whichever .nav file yout want.
+#   3. Do a search and replace on all the old prefixes, changing them to the new prefix. VS Code allows
+#      regular expressions in search to help you target the values you want to change. 
+#   4. Rebuild the site, confirm the left navigation works, and test each of the URLs in 
+#      "redirects-to-test.txt." 
 # 
 # HISTORY: 
 # Version  Who                When          What
 # -------  -----------------  ------------  -----------------------------------------
 #    1     Rob Siebens        04/28/2021    Created script
+#    2     Rob Siebens        05/02/2021    Added step to remove "index" files
 ########################################################################
 
 echo "Starting with /docs, type the path up to and including the directory you are in."
@@ -54,8 +63,7 @@ read yesNo
         exit;;
     esac
    
-directoryPrefix="  - $userDirectoryPrefix" # create a redirect prefix that can be used by printf.
-directoryPrefixSED="  - \/$userDirectoryPrefix\\" #create a parallel redirect prefix that can be used by SED.
+directoryPrefix="  - $userDirectoryPrefix" # Create a redirect prefix that can be used by printf.
 
 IFS=$'\t\n' #Set internal field separator so it ignores spaces in directory names.
 
@@ -63,21 +71,15 @@ IFS=$'\t\n' #Set internal field separator so it ignores spaces in directory name
 directoryArray=($(find . -type f -name "*.mdx" | sed -e "s/^.\///" ))
 directoryArrayLength=${#directoryArray[@]}
 
-# Use the same find command to create a paralled array that you can use with SED:
-# directoryArraySED=($(find . -type f -name "*.mdx" | sed -e "s/^.\///" ))
-
-for (( h=0; h<${directoryArrayLength}; h++ ));
+for (( h=0; h<${directoryArrayLength}; h++ )); 
 
 do
-    # Create a redirect array that can be used by printf:
-    initialRedirect=$(echo "${directoryArray[$h]}" | sed -e "s/.mdx$//")
-    finalRedirect="${directoryPrefix}${initialRedirect}" # Removed forward slash as test.
+    # Create a redirect array:
+    initialRedirect=$(echo "${directoryArray[$h]}" | sed -e "s/.mdx$//") # Chop off the .mdx extension
+    intermediateRedirect=$(echo "${initialRedirect}" | sed -e "s/index$//") #Chop off any index files
+    finalRedirect="${directoryPrefix}${intermediateRedirect}" 
 
-    # Create a parallel redirect array that can be processed by SED (escaped forward slashes):
-    initialRedirectSED=$(echo "${directoryArray[$h]}" | sed -e "s/\//\\\\\//g" -e "s/.mdx$//")
-    finalRedirectSED="${directoryPrefixSED}/${initialRedirectSED}"
-
-    existingRedirect="redirects:"
+    existingRedirect="redirects:" # The literal value we'll insert if there isn't a redirect section.
 
     if [[ $(grep "^redirects:$" "${directoryArray[$h]}") ]]  # Is there an exisitng redirects entry?
     then  
@@ -102,4 +104,5 @@ $finalRedirect
 done
 
 echo "You can find a list of redirects in this file: redirects-to-test.txt"
-echo "After you move the directory, test the redirects in your build."
+echo "After you move the directory and replace old prefixes in the nav file,"
+echo "Test the redirects in your build."
