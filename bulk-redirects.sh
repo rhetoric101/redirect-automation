@@ -16,12 +16,9 @@
 #      directory, insert this script in the "agents" directory.
 #   2. Open a command-line session and go to the directory where you copied this script.
 #   3. Execute the script: bash bulk-redirects
-#   4. At the prefix prompt, enter /docs/ followed by all the directories to reach your current directory.
-#      For example, if you put the script in "agents" you would enter the prefix "/docs/agents/"
-#      WARNING: Don't forget to include the leading and training forward slashes!
-#   5. At the confirmation prompt, enter "y" to continue.
+#   4. At the confirmation prompt, enter "y" to continue.
 #      NOTE: If you no longer want to run the script, click CTRL+C to quit.
-#   6. When the script completes, copy the file "redirects-to-test.txt" to a safe place.
+#   5. When the script completes, copy the file "redirects-to-test.txt" to a safe place.
 #
 # Do the following housekeeping tasks:
 #   1. Move the directories to their new location in the file system.
