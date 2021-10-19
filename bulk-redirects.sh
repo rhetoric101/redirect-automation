@@ -37,21 +37,24 @@
 # -------  -----------------  ------------  -----------------------------------------
 #    1     Rob Siebens        04/28/2021    Created script
 #    2     Rob Siebens        05/02/2021    Added step to remove "index" files
+#    3     Rob Siebens        10/19/2021    Added directory auto detection
 ########################################################################
 
-echo "Starting with /docs, type the path up to and including the directory you are in."
-echo "For example, if you are running this script in the agent directory to "
-echo "change all the agent's child mdx files, type this: /docs/agents/"
+# echo "Starting with /docs, type the path up to and including the directory you are in."
+# echo "For example, if you are running this script in the agent directory to "
+# echo "change all the agent's child mdx files, type this: /docs/agents/"
 echo
 
-while read -p 'Enter directory prefix: ' userDirectoryPrefix && [[ ! $userDirectoryPrefix =~ (^/.*/$)  ]] 
-do
-  echo "Oops! It looks like you're missing a forward slash somewhere in your path."
-  echo 
-done
+# Figure out the upstream directory to pre-pend to the current directory
+currentDirectory=$(pwd)
+# Chop off the directories that precede the docs directory:
+finalCurrentDirectory=$(echo "${currentDirectory}" | sed -e "s/.*\/content\/docs/\/docs/")
+# Add a final forward slash to the directory:
+finalCurrentDirectory=$(echo "${finalCurrentDirectory}" | sed 's![^/]$!&/!')
+
 
 echo "Do you want to change redirects for all the files"
-echo "below $userDirectoryPrefix [y/n]? "
+echo "below $finalCurrentDirectory [y/n]? "
 read yesNo
     case $yesNo in
       [Yy]* )
@@ -63,7 +66,7 @@ read yesNo
         exit;;
     esac
    
-directoryPrefix="  - $userDirectoryPrefix" # Create a redirect prefix that can be used by printf.
+directoryPrefix="  - $finalCurrentDirectory" # Create a redirect prefix that can be used by printf.
 
 IFS=$'\t\n' #Set internal field separator so it ignores spaces in directory names.
 
