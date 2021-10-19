@@ -16,8 +16,7 @@
 #      directory, insert this script in the "agents" directory.
 #   2. Open a command-line session and go to the directory where you copied this script.
 #   3. Execute the script: bash bulk-redirects.sh
-#   4. At the confirmation prompt, enter "y" to continue.
-#      NOTE: If you no longer want to run the script, click CTRL+C to quit.
+#   4. At the confirmation prompt, enter "y" to continue or "n" to exit.
 #   5. When the script completes, copy the file "redirects-to-test.txt" to a safe place.
 #
 # Do the following housekeeping tasks:
