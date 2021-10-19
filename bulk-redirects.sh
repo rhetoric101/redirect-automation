@@ -36,11 +36,6 @@
 #    3     Rob Siebens        10/19/2021    Added directory auto detection
 ########################################################################
 
-# echo "Starting with /docs, type the path up to and including the directory you are in."
-# echo "For example, if you are running this script in the agent directory to "
-# echo "change all the agent's child mdx files, type this: /docs/agents/"
-echo
-
 # Figure out the upstream directory to pre-pend to the current directory
 currentDirectory=$(pwd)
 # Chop off the directories that precede the docs directory:
