@@ -34,6 +34,7 @@
 #    1     Rob Siebens        04/28/2021    Created script
 #    2     Rob Siebens        05/02/2021    Added step to remove "index" files
 #    3     Rob Siebens        10/19/2021    Added directory auto detection
+#    4     Rob Siebens        10/26/2021    Removed $ after "^redirect:"
 ########################################################################
 
 # Figure out the upstream directory to pre-pend to the current directory
@@ -75,7 +76,7 @@ do
 
     existingRedirect="redirects:" # The literal value we'll insert if there isn't a redirect section.
 
-    if [[ $(grep "^redirects:$" "${directoryArray[$h]}") ]]  # Is there an exisitng redirects entry?
+    if [[ $(grep "^redirects:" "${directoryArray[$h]}") ]]  # Is there an exisitng redirects entry?
     then  
       # Insert the new redirect at the top of the list of existing redirects: 
       printf '%s\n' /^redirects:/a $finalRedirect . w q | ex -s ${directoryArray[$h]}
